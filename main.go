@@ -6,6 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/thientran2020/simple-web-server-go/database"
+	"github.com/thientran2020/simple-web-server-go/routes"
 )
 
 func main() {
@@ -15,9 +16,7 @@ func main() {
 
 	app := fiber.New()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello World...!!!")
-	})
+	routes.Setup(app)
 
 	app.Listen(":9090")
 }
