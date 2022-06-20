@@ -1,0 +1,12 @@
+GET http://localhost:9090
+
+
+###
+POST http://localhost:9090/api/register
+Content-Type: application/json
+
+{
+    "username": "thientran",
+    "password": "abc123",
+    "pin": "9999"
+}
