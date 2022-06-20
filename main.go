@@ -20,4 +20,6 @@ func main() {
 	routes.Register(app)
 
 	app.Listen(":9090")
+
+	// Some testing
 }
