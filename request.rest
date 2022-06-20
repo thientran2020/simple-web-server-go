@@ -6,7 +6,16 @@ POST http://localhost:9090/api/register
 Content-Type: application/json
 
 {
-    "username": "thientran",
-    "password": "abc123",
-    "pin": "9999"
+    "username": "peterpan",
+    "password": "peterpan",
+    "pin": "1234"
+}
+
+###
+POST http://localhost:9090/api/login
+Content-Type: application/json
+
+{
+    "username": "peterpan",
+    "password": "peterpan"
 }

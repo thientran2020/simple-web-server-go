@@ -31,8 +31,47 @@ func Register(c *fiber.Ctx) error {
 	statement, _ := database.DB.Prepare(`
 		INSERT INTO users (username, password, pin) VALUES (?, ?, ?)
 	`)
-	log.Printf(user.Username + " | " + user.Password + " | " + user.Pin)
 	statement.Exec(user.Username, user.Password, user.Pin)
+	log.Println("User has been successfully created...!")
 
 	return c.JSON(user)
+}
+
+func Login(c *fiber.Ctx) error {
+	var data map[string]string
+
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+
+	statement, _ := database.DB.Prepare(`
+		SELECT password FROM users WHERE username = ? LIMIT 1
+	`)
+	rows, err := statement.Query(data["username"])
+
+	if err != nil {
+		c.Status(fiber.StatusNotFound)
+		return c.JSON(fiber.Map{
+			"message": "User not found!!!",
+		})
+	}
+
+	var password []byte
+	for rows.Next() {
+		err := rows.Scan(&password)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	if err := bcrypt.CompareHashAndPassword(password, []byte(data["password"])); err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "Incorrect password",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "Logged In!!!",
+	})
 }
