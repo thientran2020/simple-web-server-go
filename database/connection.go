@@ -5,15 +5,17 @@ import (
 	"log"
 )
 
+var DB *sql.DB
+
 func Connect() {
-	db, err := sql.Open("sqlite3", "./database.db")
+	database, err := sql.Open("sqlite3", "./database/database.db")
 	if err != nil {
 		panic("Could not connect to database.db!")
 	}
 	log.Println("Database connected...!!!")
 
 	// Create users table
-	statement, _ := db.Prepare(`
+	statement, _ := database.Prepare(`
 		CREATE TABLE IF NOT EXISTS users (
 			userID INTEGER PRIMARY KEY,
 			username VARCHAR(255) NOT NULL,
@@ -23,22 +25,13 @@ func Connect() {
 			address VARCHAR(255),
 			city VARCHAR(255),
 			state VARCHAR(255),
-			zipCode INT, 
+			zipCode INT,
 			phoneNumber VARCHAR(255),
 			pin VARCHAR(9) NOT NULL
 		);
 	`)
 	statement.Exec()
 
-	// rows, _ := database.Query("SELECT * FROM accounts")
-	// var accountId string
-	// var userId string
-	// var accountType string
-	// var balance string
-	// var status string
-
-	// for rows.Next() {
-	// 	rows.Scan(&accountId, &userId, &accountType, &balance, &status)
-	// 	log.Println(accountId + " | " + userId + " | " + accountType + " | " + balance + " | " + status)
-	// }
+	// Assign DB for database connection so we can user in other packages
+	DB = database
 }
