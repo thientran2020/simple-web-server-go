@@ -17,6 +17,7 @@ func main() {
 	app := fiber.New()
 
 	routes.Setup(app)
+	routes.Register(app)
 
 	app.Listen(":9090")
 }
